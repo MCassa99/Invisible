@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Enviar Mensaje</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Estilos -->
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: white;
+      padding: 32px;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    select, textarea, button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #556cd6;
+    }
+
+    #status {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("nWEVYAfvTT0LPPoRS"); // ← REEMPLAZAR
+    })();
+  </script>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2>Enviar mensaje</h2>
+
+    <select id="contact">
+      <option value="1">Belén</option>
+      <option value="2">Daniel</option>
+      <option value="3">Mateo</option>
+      <option value="4">Myriam</option>
+      <option value="5">Julieta</option>
+      <option value="6">Matías</option>
+    </select>
+
+    <textarea id="message" placeholder="Escribí tu mensaje..."></textarea>
+
+    <button onclick="sendMail()">Enviar</button>
+
+    <div id="status"></div>
+  </div>
+
+  <script>
+    const contacts = {
+      1: { name: "Belen", email: "belub19@icloud.com" },
+      2: { name: "Daniel", email: "danbocks@gmail.com" },
+      3: { name: "Mateo", email: "mateobocksberger@gmail.com" },
+      4: { name: "Myriam", email: "migrett@gmail.com" },
+      5: { name: "Julieta", email: "julietarabazza22@gmail.com" },
+      6: { name: "Matias", email: "mcassa1999@gmail.com" }
+    };
+
+    function sendMail() {
+      const contactId = document.getElementById("contact").value;
+      const message = document.getElementById("message").value.trim();
+      const status = document.getElementById("status");
+
+      if (!message) {
+        status.style.color = "red";
+        status.innerText = "Escribí un mensaje antes de enviar.";
+        return;
+      }
+
+      status.style.color = "#333";
+      status.innerText = "Enviando mensaje...";
+
+      emailjs.send(
+        "service_jfpjgj5",   // ← REEMPLAZAR
+        "template_1runjor",  // ← REEMPLAZAR
+        {
+          to_name: contacts[contactId].name,
+          to_email: contacts[contactId].email,
+          message: message
+        }
+      )
+      .then(() => {
+        status.style.color = "green";
+        status.innerText = "Mensaje enviado correctamente ✔";
+        document.getElementById("message").value = "";
+      })
+      .catch(() => {
+        status.style.color = "red";
+        status.innerText = "Error al enviar el mensaje.";
+      });
+    }
+  </script>
+
+</body>
+</html>
